@@ -20,10 +20,66 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             Console.WriteLine($"{args} : {result}");
         }
 
-        public static int FindDigit(string equation)
+        private static int FindDigit(string equation)
         {
-            // Add your code here.
-            throw new NotImplementedException();
+            double[] numbers = new double[3];
+            double result;
+            string unknown = "", res_string;
+            int missing_part = 0, index = 0, flag = 0;
+
+            string[] temp = equation.Split(new Char[] { '*', '=' });
+
+            for (int i = 0; i < 3; i++)
+            {
+                if (temp[i].IndexOf('?') < 0)
+                {
+                    string temp1 = temp[i];
+                    numbers[i] = Int32.Parse(temp1);
+                }
+                else
+                {
+                    unknown = temp[i];
+                    index = temp[i].IndexOf('?');
+                    missing_part = i;
+                }
+            }
+            if (missing_part == 0)
+            {
+                result = numbers[2] / numbers[1];
+                flag = Check(result);
+            }
+            else if (missing_part == 1)
+            {
+                result = numbers[2] / numbers[0];
+                flag = Check(result);
+            }
+            else
+            {
+                result = numbers[0] * numbers[1];
+                flag = Check(result);
+            }
+            res_string = result.ToString();
+
+            if (res_string.Length == unknown.Length && flag == 1)
+            {
+                return (int)Char.GetNumericValue(res_string, index);
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        private static int Check(double a)
+        {
+            if ((a % 1) > 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
         }
     }
 }
