@@ -20,65 +20,56 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             Console.WriteLine($"{args} : {result}");
         }
 
-        private static int FindDigit(string equation)
+         private static int FindDigit(string equation)
         {
             double[] numbers = new double[3];
             double result;
             string unknown = "", res_string;
-            int missing_part = 0, index = 0, flag = 0;
+            int missing_part = 0, index = 0;
+            bool flag = true;   //checks if decimal number
 
-            string[] temp = equation.Split(new Char[] { '*', '=' });
+            string[] equation_numbers = equation.Split(new Char[] { '*', '=' });
 
             for (int i = 0; i < 3; i++)
             {
-                if (temp[i].IndexOf('?') < 0)
+                if (equation_numbers[i].IndexOf('?') < 0)   //checks whether current number has '?' symbol
                 {
-                    string temp1 = temp[i];
+                    string temp1 = equation_numbers[i];
                     numbers[i] = Int32.Parse(temp1);
                 }
                 else
                 {
-                    unknown = temp[i];
-                    index = temp[i].IndexOf('?');
+                    unknown = equation_numbers[i];
+                    index = equation_numbers[i].IndexOf('?');
                     missing_part = i;
                 }
             }
             if (missing_part == 0)
             {
+                if (numbers[1] == 0) { return -1; }
                 result = numbers[2] / numbers[1];
-                flag = Check(result);
+                flag = (result % 1) > 0 ? true : false;
             }
             else if (missing_part == 1)
             {
+                if (numbers[0] == 0) { return -1; }
                 result = numbers[2] / numbers[0];
-                flag = Check(result);
+                flag = (result % 1) > 0 ? true : false;
             }
             else
             {
                 result = numbers[0] * numbers[1];
-                flag = Check(result);
+                flag = (result % 1) > 0 ? true : false;
             }
             res_string = result.ToString();
 
-            if (res_string.Length == unknown.Length && flag == 1)
+            if (res_string.Length == unknown.Length && !flag)
             {
                 return (int)Char.GetNumericValue(res_string, index);
             }
             else
             {
                 return -1;
-            }
-        }
-
-        private static int Check(double a)
-        {
-            if ((a % 1) > 0)
-            {
-                return 0;
-            }
-            else
-            {
-                return 1;
             }
         }
     }
